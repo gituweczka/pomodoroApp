@@ -7,18 +7,20 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 0.25
-SHORT_BREAK_MIN = 0.25
+WORK_MIN = 35
+SHORT_BREAK_MIN = 6
 LONG_BREAK_MIN = 20
 reps = 0
+timer = None
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 def reset_counting():
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text, text="00:00")
+    main_label.config(text="Timer", fg= GREEN)
+    check_marks.config(text="")
     global reps
-    reps = 
-
-
-
+    reps = 0
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
@@ -41,14 +43,14 @@ def start_counting():
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(count):
-
+    global timer
     count_min = math.floor(count/60)
     count_sec = count % 60
     if count_sec < 10:
         count_sec = f"0{count_sec}"
     canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count >0:
-        window.after(1000, count_down, count-1)
+        timer = window.after(1000, count_down, count-1)
     else:
         start_counting()
         mark = ""
